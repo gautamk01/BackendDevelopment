@@ -21,60 +21,41 @@ mongoose
   });
 
 //Schema -> Model
-//THis is basic Schema
-
-const bookSchema = new mongoose.Schema({
+// THis is basic Schema
+const tourSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'The Name of a book is more important '],
+    required: [true, 'A Tour Must have a name'],
+    unique: true,
   },
-  rating: Number,
-  price: Number,
+  rating: {
+    type: Number,
+    default: 4.5,
+  },
+  price: {
+    type: Number,
+    required: [true, 'A Tour Must have a price'],
+  },
 });
 
-const Bookmodel = mongoose.model('Book', bookSchema);
+//Model
+const Tour = mongoose.model('Tour', tourSchema);
 
-const testbook = new Bookmodel({
-  name: 'The Dairy of Wimpy kid',
-  rating: 4.5,
-  price: 400,
+//This is an instance of Tour Model
+const testTour = new Tour({
+  name: 'The Forest Hiker',
+  rating: 4.7,
+  price: 450,
 });
 
-testbook.save().then((doc) => console.log(doc));
-// const tourSchema = new mongoose.Schema({
-//   name: {
-//     type: String,
-//     required: [true, 'A Tour Must have a name'],
-//     unique: true,
-//   },
-//   rating: {
-//     type: Number,
-//     default: 4.5,
-//   },
-//   price: {
-//     type: Number,
-//     required: [true, 'A Tour Must have a price'],
-//   },
-// });
-
-// //Model
-// const Tour = mongoose.model('Tour', tourSchema);
-
-// //This is an instance of Tour Model
-// const testTour = new Tour({
-//   name: 'The Forest Hiker',
-//   rating: 4.7,
-//   price: 450,
-// });
-
-// testTour
-//   .save()
-//   .then((doc) => {
-//     console.log(doc);
-//   })
-//   .catch((error) => {
-//     console.log(`There is an error ${error}`);
-//   });
+testTour
+  .save()
+  .then((doc) => {
+    console.log(doc);
+  })
+  .catch((error) => {
+    console.log(`There is an error ${error}`);
+  });
 
 const port = process.env.port || 3000;
 app.listen(port, () => {
