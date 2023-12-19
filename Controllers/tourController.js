@@ -8,24 +8,23 @@ const TourModel = require('../Models/TourModels');
  *
  */
 
-exports.getallTours = (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    requestedAt: req.requestTime,
-    // result: tours.length,
-    // data: {
-    //   tours,
-    // },
-  });
-};
-
-exports.getTour = (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    // data: {
-    //   tour,
-    // },
-  });
+exports.getallTours = async (req, res) => {
+  try {
+    const Tours = await TourModel.find();
+    res.status(200).json({
+      status: 'success',
+      requestedAt: req.requestTime,
+      result: Tours.length,
+      data: {
+        Tours,
+      },
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: 'Failed',
+      message: 'Found an error',
+    });
+  }
 };
 
 exports.createTour = async (req, res) => {
@@ -41,24 +40,66 @@ exports.createTour = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(400).json({ status: 'failed', message: 'Invalid data sent' });
+    res.status(400).json({ status: 'failed', message: error });
   }
 };
 
-exports.updateTour = (req, res) => {
-  res.status(200).json({
-    status: 'Success',
-    data: {
-      tour: `<Updated tour here....> `,
-    },
-  });
+exports.getTour = async (req, res) => {
+  try {
+    const singleTour = await TourModel.findById(req.params.id);
+    //TourModel.findOne({_id:req.params.id})
+    res.status(200).json({
+      status: 'success',
+      data: {
+        Tour: singleTour,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'Failed',
+      error: err,
+    });
+  }
 };
 
-exports.deleteTour = (req, res) => {
-  res.status(204).json({
-    status: 'Success',
-    data: null,
-  });
+exports.updateTour = async (req, res) => {
+  try {
+    const updatedTour = await TourModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+    console.log(req.body);
+    res.status(200).json({
+      status: 'Success',
+      data: {
+        tour: updatedTour,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: 'Failed',
+      message: error,
+    });
+  }
+};
+
+exports.deleteTour = async (req, res) => {
+  try {
+    const deletedTour = await TourModel.findByIdAndDelete(req.params.id);
+    res.status(204).json({
+      status: 'Success',
+      data: deletedTour,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: 'Failed',
+      data: error,
+    });
+  }
 };
 
 // exports.idchecker = (req, res, next, val) => {
