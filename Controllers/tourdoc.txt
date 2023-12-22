@@ -1,0 +1,80 @@
+// exports.getallTours = async (req, res) => {
+//   try {
+//     //Build Query
+//     //1) Filtering
+//     // const querycollection = { ...req.query };
+//     // console.log(req.query);
+//     // const excludefield = ['page', 'sort', 'limit', 'fields']; //we are doing this because we can't add this in the query
+//     // excludefield.forEach((el) => delete querycollection[el]);
+
+//     // //2) Advanced Filtering
+//     // let queryStr = JSON.stringify(querycollection);
+//     // queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+//     //\b => is used to match this exact word
+//     // /g => if we have 2 or 3 opertor if will replace every thing
+
+//     // { difficulty: 'easy', duration: { $gte: '5' } }
+//     // { difficulty: 'easy', duration: { gte: '5' } }
+//     //gte,gt,lte,lt
+
+//     // let query = TourModel.find(JSON.parse(queryStr));
+
+//     //3)Sorting
+//     // if (req.query.sort) {
+//     //   const sortBy = req.query.sort.split(',').join(' '); //req.query.sort =>takes only the sort section
+//     //   //then If we have more than one criteria for sorting the we split the , then join by whitespace
+//     //   query = query.sort(sortBy); //Then add that to the sorting section
+//     //   //sort is a function used by the models
+//     // } else {
+//     //   query = query.sort('-createdAt ratingsQuantity');
+//     // }
+
+//     // //4) Fields
+//     // if (req.query.fields) {
+//     //   const fields = req.query.fields.split(',').join(' ');
+//     //   query = query.select(fields);
+//     // } else {
+//     //   query = query.select('-__v');
+//     // }
+//     //5) Pagination
+
+//     /**
+//      * Consider page = 3 and limit=10
+//      * 1-10 -page1
+//      * 11-20 -page2
+//      * 21-30 -page3
+//      */
+//     // const page = req.query.page * 1 || 1;
+//     // const limit = req.query.limit * 1 || 100;
+//     // const skip = (page - 1) * limit;
+
+//     // query = query.skip(skip).limit(limit);
+//     //Below things are not required
+//     // if (req.query.page) {
+//     //   const numTour = await TourModel.countDocuments();
+//     //   if (skip >= numTour) throw new Error('This Page desnot exsiste');
+//     // }
+
+//     //Execute query
+//     const features = new APIfeatures(TourModel.find(), req.query)
+//       .filter()
+//       .sort()
+//       .fields()
+//       .pageing();
+
+//     const Tours = await features.query;
+//     res.status(200).json({
+//       status: 'success',
+//       requestedAt: req.requestTime,
+//       result: Tours.length,
+//       data: {
+//         Tours,
+//       },
+//     });
+//   } catch (error) {
+//     res.status(404).json({
+//       status: 'Failed',
+//       message: 'Found an error',
+//     });
+//   }
+// };
